@@ -16,7 +16,7 @@ let awsConfig = {
 
 try {
   awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
-} catch (e) { }
+} catch (e) {}
 
 export default defineConfig({
   projectId: "7s5okt",
@@ -76,34 +76,34 @@ export default defineConfig({
     experimentalStudio: true,
     setupNodeEvents(on, config) {
       // Log quando um vídeo é salvo
-      on('after:spec', (spec, results) => {
+      on("after:spec", (spec, results) => {
         if (results && results.video) {
-          console.log('');
-          console.log('═══════════════════════════════════════════════════════════');
-          console.log('📹 VÍDEO DO TESTE SALVO EM:');
+          console.log("");
+          console.log("═══════════════════════════════════════════════════════════");
+          console.log("📹 VÍDEO DO TESTE SALVO EM:");
           console.log(`   ${results.video}`);
-          console.log('═══════════════════════════════════════════════════════════');
-          console.log('');
+          console.log("═══════════════════════════════════════════════════════════");
+          console.log("");
         }
       });
 
-      on('task', {
+      on("task", {
         async queryDatabase(query) {
-          const { Client } = require('pg');
+          const { Client } = require("pg");
           const client = new Client({
-            host: process.env.DB_HOST || 'localhost',
-            port: parseInt(process.env.DB_PORT || '5432'),
+            host: process.env.DB_HOST || "localhost",
+            port: parseInt(process.env.DB_PORT || "5432"),
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME
+            database: process.env.DB_NAME,
           });
-          
+
           await client.connect();
           const res = await client.query(query);
           await client.end();
-          
+
           return res.rows;
-        }
+        },
       });
 
       const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
@@ -126,10 +126,14 @@ export default defineConfig({
 
         // fetch test data from a database (MySQL, PostgreSQL, etc...)
         "filter:database"(queryPayload) {
-          return queryDatabase(queryPayload, (data: any, attrs: any) => _.filter(data.results, attrs));
+          return queryDatabase(queryPayload, (data: any, attrs: any) =>
+            _.filter(data.results, attrs)
+          );
         },
         "find:database"(queryPayload) {
-          return queryDatabase(queryPayload, (data: any, attrs: any) => _.find(data.results, attrs));
+          return queryDatabase(queryPayload, (data: any, attrs: any) =>
+            _.find(data.results, attrs)
+          );
         },
         getAuth0Credentials() {
           const username = process.env.AUTH0_USERNAME;

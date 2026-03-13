@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 import Dinero from "dinero.js";
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
@@ -156,15 +156,12 @@ describe("New Transaction", function () {
       receiver: ctx.contact,
     };
 
-    
     let startBalance: string;
     if (!isMobile()) {
-      
-      
       cy.get("[data-test=sidenav-user-balance]")
         .invoke("text")
         .then((x) => {
-          startBalance = x; 
+          startBalance = x;
           expect(startBalance).to.match(/\$\d/);
         });
     }
@@ -174,11 +171,7 @@ describe("New Transaction", function () {
     cy.getBySel("new-transaction-create-another-transaction").should("be.visible");
 
     if (!isMobile()) {
-      
       cy.get("[data-test=sidenav-user-balance]").should(($el) => {
-        
-        
-        
         expect($el.text()).to.not.equal(startBalance);
       });
     }
@@ -270,14 +263,13 @@ describe("New Transaction", function () {
         cy.log(`Searching by **${attr}**`);
         cy.getBySel("user-list-search-input").type(targetUser[attr] as string, { force: true });
         cy.wait("@usersSearch")
-          
+
           .its("response.body.results")
           .should("have.length.gt", 0)
           .its("length")
           .then((resultsN) => {
             cy.getBySelLike("user-list-item")
-              
-              
+
               .should("have.length", resultsN)
               .first()
               .contains(targetUser[attr] as string);

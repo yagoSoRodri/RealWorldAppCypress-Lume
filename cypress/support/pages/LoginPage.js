@@ -1,7 +1,13 @@
 class LoginPage {
-  get usernameInput() { return cy.getBySel('signin-username'); }
-  get passwordInput() { return cy.getBySel('signin-password'); }
-  get submitBtn() { return cy.getBySel('signin-submit'); }
+  get usernameInput() {
+    return cy.getBySel("signin-username");
+  }
+  get passwordInput() {
+    return cy.getBySel("signin-password");
+  }
+  get submitBtn() {
+    return cy.getBySel("signin-submit");
+  }
 
   fillLogin(username, password) {
     if (username) this.usernameInput.type(username);

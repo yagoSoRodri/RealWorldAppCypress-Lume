@@ -396,10 +396,7 @@ Cypress.Commands.add("loginViaApi", (username, password) => {
     username,
     password,
   }).then((response) => {
-    window.localStorage.setItem(
-      process.env.VITE_AUTH_TOKEN_NAME!,
-      response.body.token
-    );
+    window.localStorage.setItem(process.env.VITE_AUTH_TOKEN_NAME!, response.body.token);
     window.localStorage.setItem(
       "authState",
       JSON.stringify({
@@ -409,4 +406,3 @@ Cypress.Commands.add("loginViaApi", (username, password) => {
     );
   });
 });
-
