@@ -1,8 +1,8 @@
-require("dotenv").config();
+require('dotenv').config();
 
-import shortid from "shortid";
-import { faker } from "@faker-js/faker";
-import bcrypt from "bcryptjs";
+import shortid from 'shortid';
+import { faker } from '@faker-js/faker';
+import bcrypt from 'bcryptjs';
 import {
   map,
   flattenDeep,
@@ -23,7 +23,7 @@ import {
   compact,
   differenceBy,
   sampleSize,
-} from "lodash/fp";
+} from 'lodash/fp';
 import {
   BankAccount,
   User,
@@ -43,8 +43,8 @@ import {
   BankTransferType,
   BankTransfer,
   PaymentNotificationStatus,
-} from "../src/models";
-import { getFakeAmount } from "../src/utils/transactionUtils";
+} from '../src/models';
+import { getFakeAmount } from '../src/utils/transactionUtils';
 
 export const userbaseSize = +process.env.SEED_USERBASE_SIZE!;
 export const contactsPerUser = +process.env.SEED_CONTACTS_PER_USER!;
@@ -71,39 +71,39 @@ export const totalNotifications = userbaseSize! * notificationsPerUser!;
 export const totalContacts = userbaseSize! * contactsPerUser!;
 export const totalBankTransfers = userbaseSize! * bankTransfersPerUser * 2; // deposit & withdrawal
 
-export const isPayment = (type: string) => type === "payment";
+export const isPayment = (type: string) => type === 'payment';
 export const passwordHash = bcrypt.hashSync(defaultPassword, 10);
 
 const requestScenarios: TransactionScenario[] = [
   {
     status: TransactionStatus.pending,
-    requestStatus: "pending",
+    requestStatus: 'pending',
   },
   {
     status: TransactionStatus.complete,
-    requestStatus: "accepted",
+    requestStatus: 'accepted',
   },
   {
     status: TransactionStatus.complete,
-    requestStatus: "rejected",
+    requestStatus: 'rejected',
   },
 ];
 
 const paymentScenarios: TransactionScenario[] = [
   {
     status: TransactionStatus.pending,
-    requestStatus: "",
+    requestStatus: '',
   },
   {
     status: TransactionStatus.complete,
-    requestStatus: "",
+    requestStatus: '',
   },
 ];
 
 export const getRandomTransactions = (baseCount: number, baseTransactions: Transaction[]) =>
   compact(
     uniqBy(
-      "id",
+      'id',
       times(() => sample(baseTransactions), baseCount * 3)
     )
   ).slice(0, baseCount);
@@ -138,7 +138,7 @@ export const createFakeUser = (): User => {
 // @ts-ignore
 export const createSeedUsers = () => times(() => createFakeUser(), userbaseSize);
 
-export const createContact = (userId: User["id"], contactUserId: User["id"]) => ({
+export const createContact = (userId: User['id'], contactUserId: User['id']) => ({
   id: shortid(),
   uuid: faker.random.uuid(),
   userId,
@@ -149,12 +149,12 @@ export const createContact = (userId: User["id"], contactUserId: User["id"]) => 
 
 // returns a random user other than the one passed in
 export const getOtherRandomUser = curry(
-  (seedUsers: User[], userId: User["id"]): User => flow(reject(["id", userId]), sample)(seedUsers)
+  (seedUsers: User[], userId: User['id']): User => flow(reject(['id', userId]), sample)(seedUsers)
 );
 
 export const randomContactsForUser = curry((seedUsers: User[], user: User) =>
   uniqBy(
-    "id",
+    'id',
     times(() => getOtherRandomUser(seedUsers, user.id), contactsPerUser * 3)
   ).slice(0, contactsPerUser)
 );
@@ -194,7 +194,7 @@ export const createSeedBankAccounts = (seedUsers: User[]) =>
 // Transactions
 
 export const createTransaction = (
-  type: "payment" | "request",
+  type: 'payment' | 'request',
   account: BankAccount,
   details: FakeTransaction
 ): Transaction => {
@@ -205,9 +205,9 @@ export const createTransaction = (
 
   const status = faker.helpers.randomize([TransactionStatus.pending, TransactionStatus.complete]);
 
-  let requestStatus = "";
+  let requestStatus = '';
 
-  if (type === "request") {
+  if (type === 'request') {
     requestStatus = TransactionRequestStatus.pending;
 
     if (status === TransactionStatus.complete) {
@@ -220,7 +220,7 @@ export const createTransaction = (
 
   const requestResolvedAt =
     requestStatus === TransactionRequestStatus.pending
-      ? ""
+      ? ''
       : faker.date.future(undefined, createdAt);
 
   return {
@@ -249,13 +249,13 @@ export const createTransaction = (
 
 export const createPayment = (account: BankAccount, user: User, randomUser: User) => {
   const allScenarios = paymentScenarios.map((details) => {
-    const paymentTransaction = createTransaction("payment", account, {
+    const paymentTransaction = createTransaction('payment', account, {
       senderId: user.id,
       receiverId: randomUser.id,
       ...details,
     });
 
-    const paymentInverseTransaction = createTransaction("payment", account, {
+    const paymentInverseTransaction = createTransaction('payment', account, {
       senderId: randomUser.id,
       receiverId: user.id,
       ...details,
@@ -269,13 +269,13 @@ export const createPayment = (account: BankAccount, user: User, randomUser: User
 
 export const createRequest = (account: BankAccount, user: User, randomUser: User) => {
   const allScenarios = requestScenarios.map((details) => {
-    const requestTransaction = createTransaction("request", account, {
+    const requestTransaction = createTransaction('request', account, {
       senderId: user.id,
       receiverId: randomUser.id,
       ...details,
     });
 
-    const requestInverseTransaction = createTransaction("request", account, {
+    const requestInverseTransaction = createTransaction('request', account, {
       senderId: randomUser.id,
       receiverId: user.id,
       ...details,
@@ -289,12 +289,12 @@ export const createRequest = (account: BankAccount, user: User, randomUser: User
 
 export const getBankAccountsByUserId = (
   seedBankAccounts: BankAccount[],
-  userId: User["id"]
-): BankAccount[] => filter(flow(get("userId"), isEqual(userId)), seedBankAccounts);
+  userId: User['id']
+): BankAccount[] => filter(flow(get('userId'), isEqual(userId)), seedBankAccounts);
 
 export const getTransactionsByUserId = (
   seedTransactions: Transaction[],
-  userId: User["id"]
+  userId: User['id']
 ): Transaction[] =>
   filter(
     ({ senderId, receiverId }) => isEqual(senderId, userId) || isEqual(receiverId, userId),
@@ -323,7 +323,7 @@ export const createSeedTransactions = (seedUsers: User[], seedBankAccounts: Bank
 
           const testTransactions = [paidTransaction, requestedTransaction, chargedTransaction];
 
-          const remainingScenarios = differenceBy(get("id"), allScenarios, testTransactions);
+          const remainingScenarios = differenceBy(get('id'), allScenarios, testTransactions);
 
           // @ts-ignore
           return flattenDeep(concat(testTransactions, remainingScenarios));
@@ -343,12 +343,12 @@ export const createFakeLike = (userId: string, transactionId: string): Like => (
 
 export const getPublicTransactionsForOtherUsers = (
   seedTransactions: Transaction[],
-  userId: User["id"]
+  userId: User['id']
 ): Transaction[] =>
   flow(
     filter({ privacyLevel: DefaultPrivacyLevel.public }),
-    filter(flow(get("senderId"), negate(isEqual(userId)))),
-    filter(flow(get("receiverId"), negate(isEqual(userId))))
+    filter(flow(get('senderId'), negate(isEqual(userId)))),
+    filter(flow(get('receiverId'), negate(isEqual(userId))))
   )(seedTransactions);
 
 export const createSeedLikes = (seedUsers: User[], seedTransactions: Transaction[]) =>
@@ -449,7 +449,7 @@ const getTransactionsWithLikes = (transactions: Transaction[], seedLikes: Like[]
     seedLikes
   );
 
-const getLikeByTransactionId = (transactionId: Transaction["id"], seedLikes: Like[]) =>
+const getLikeByTransactionId = (transactionId: Transaction['id'], seedLikes: Like[]) =>
   find({ transactionId }, seedLikes) as Like;
 
 const getTransactionsWithComments = (transactions: Transaction[], seedComments: Comment[]) =>
@@ -460,7 +460,7 @@ const getTransactionsWithComments = (transactions: Transaction[], seedComments: 
     seedComments
   );
 
-const getCommentByTransactionId = (transactionId: Transaction["id"], seedComments: Comment[]) =>
+const getCommentByTransactionId = (transactionId: Transaction['id'], seedComments: Comment[]) =>
   find({ transactionId }, seedComments) as Comment;
 
 export const createSeedNotifications = (
@@ -514,9 +514,9 @@ export const createSeedNotifications = (
 
 export const createBankTransfer = (
   transferType: BankTransferType,
-  userId: User["id"],
-  transactionId: Transaction["id"],
-  bankAccountId: BankAccount["id"]
+  userId: User['id'],
+  transactionId: Transaction['id'],
+  bankAccountId: BankAccount['id']
 ): BankTransfer => ({
   id: shortid(),
   uuid: faker.random.uuid(),

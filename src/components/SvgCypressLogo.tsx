@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 function SvgCypressLogo(props: any) {
   return (
@@ -6,7 +6,7 @@ function SvgCypressLogo(props: any) {
       width="119"
       height="48"
       viewBox="0 0 119 48"
-      style={{ height: "135px" }}
+      style={{ height: '135px' }}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}

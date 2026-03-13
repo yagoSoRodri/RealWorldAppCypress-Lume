@@ -1,9 +1,9 @@
-import React from "react";
-import { List } from "@mui/material";
+import React from 'react';
+import { List } from '@mui/material';
 
-import { BankAccount } from "../models";
-import BankAccountItem from "./BankAccountItem";
-import EmptyList from "./EmptyList";
+import { BankAccount } from '../models';
+import BankAccountItem from './BankAccountItem';
+import EmptyList from './EmptyList';
 
 export interface BankAccountListProps {
   bankAccounts: BankAccount[];

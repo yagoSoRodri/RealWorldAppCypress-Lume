@@ -1,26 +1,26 @@
 /* istanbul ignore next */
-import React, { useEffect } from "react";
-import { styled } from "@mui/material/styles";
-import { useActor, useMachine } from "@xstate/react";
-import { CssBaseline } from "@mui/material";
+import React, { useEffect } from 'react';
+import { styled } from '@mui/material/styles';
+import { useActor, useMachine } from '@xstate/react';
+import { CssBaseline } from '@mui/material';
 
-import { snackbarMachine } from "../machines/snackbarMachine";
-import { notificationsMachine } from "../machines/notificationsMachine";
-import { authService } from "../machines/authMachine";
-import AlertBar from "../components/AlertBar";
-import { bankAccountsMachine } from "../machines/bankAccountsMachine";
-import PrivateRoutesContainer from "./PrivateRoutesContainer";
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { snackbarMachine } from '../machines/snackbarMachine';
+import { notificationsMachine } from '../machines/notificationsMachine';
+import { authService } from '../machines/authMachine';
+import AlertBar from '../components/AlertBar';
+import { bankAccountsMachine } from '../machines/bankAccountsMachine';
+import PrivateRoutesContainer from './PrivateRoutesContainer';
+import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 
-const PREFIX = "appAuth0";
+const PREFIX = 'appAuth0';
 
 const classes = {
   root: `${PREFIX}-root`,
 };
 
-const Root = styled("div")(({ theme }) => ({
+const Root = styled('div')(({ theme }) => ({
   [`&.${classes.root}`]: {
-    display: "flex",
+    display: 'flex',
   },
 }));
 
@@ -45,14 +45,14 @@ const AppAuth0: React.FC = () => {
   useEffect(() => {
     (async function waitForToken() {
       const token = await getAccessTokenSilently();
-      authService.send("AUTH0", { user, token });
+      authService.send('AUTH0', { user, token });
     })();
   }, [isAuthenticated, user, getAccessTokenSilently]);
 
   const isLoggedIn =
-    authState.matches("authorized") ||
-    authState.matches("refreshing") ||
-    authState.matches("updating");
+    authState.matches('authorized') ||
+    authState.matches('refreshing') ||
+    authState.matches('updating');
 
   return (
     <Root className={classes.root}>

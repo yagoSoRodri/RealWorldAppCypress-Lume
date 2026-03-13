@@ -1,10 +1,10 @@
-import React from "react";
-import { List } from "@mui/material";
+import React from 'react';
+import { List } from '@mui/material';
 
-import NotificationListItem from "./NotificationListItem";
-import { NotificationResponseItem } from "../models";
-import EmptyList from "./EmptyList";
-import RemindersIllustration from "./SvgUndrawReminders697P";
+import NotificationListItem from './NotificationListItem';
+import { NotificationResponseItem } from '../models';
+import EmptyList from './EmptyList';
+import RemindersIllustration from './SvgUndrawReminders697P';
 
 export interface NotificationsListProps {
   notifications: NotificationResponseItem[];

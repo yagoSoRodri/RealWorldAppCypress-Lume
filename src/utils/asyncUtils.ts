@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 const httpClient = axios.create({
   withCredentials: true,
@@ -14,7 +14,7 @@ httpClient.interceptors.request.use((config) => {
   ) {
     const accessToken = localStorage.getItem(process.env.VITE_AUTH_TOKEN_NAME!);
     // @ts-ignore
-    config.headers["Authorization"] = `Bearer ${accessToken}`;
+    config.headers['Authorization'] = `Bearer ${accessToken}`;
   }
   return config;
 });

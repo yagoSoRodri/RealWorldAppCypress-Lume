@@ -1,9 +1,9 @@
-import React from "react";
-import { styled } from "@mui/material/styles";
-import { head } from "lodash/fp";
-import { Interpreter } from "xstate";
-import { useActor } from "@xstate/react";
-import clsx from "clsx";
+import React from 'react';
+import { styled } from '@mui/material/styles';
+import { head } from 'lodash/fp';
+import { Interpreter } from 'xstate';
+import { useActor } from '@xstate/react';
+import clsx from 'clsx';
 import {
   useMediaQuery,
   useTheme,
@@ -16,20 +16,20 @@ import {
   Grid,
   Avatar,
   Typography,
-} from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+} from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Home as HomeIcon,
   Person as PersonIcon,
   ExitToApp as LogoutIcon,
   Notifications as NotificationsIcon,
   AccountBalance as AccountBalanceIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 
-import { formatAmount } from "../utils/transactionUtils";
-import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { formatAmount } from '../utils/transactionUtils';
+import { AuthMachineContext, AuthMachineEvents } from '../machines/authMachine';
 
-const PREFIX = "NavDrawer";
+const PREFIX = 'NavDrawer';
 
 const classes = {
   toolbar: `${PREFIX}-toolbar`,
@@ -51,18 +51,18 @@ const StyledDrawer = styled(Drawer)(({ theme }) => ({
   },
 
   [`& .${classes.toolbarIcon}`]: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
     ...theme.mixins.toolbar,
   },
 
   [`& .${classes.drawerPaper}`]: {
-    position: "relative",
-    whiteSpace: "nowrap",
+    position: 'relative',
+    whiteSpace: 'nowrap',
     width: drawerWidth,
-    transition: theme.transitions.create("width", {
+    transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -70,13 +70,13 @@ const StyledDrawer = styled(Drawer)(({ theme }) => ({
 
   [`& .${classes.drawerPaperClose}`]: {
     marginTop: 50,
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
+    overflowX: 'hidden',
+    transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up('sm')]: {
       width: theme.spacing(9),
     },
   },
@@ -86,7 +86,7 @@ const StyledDrawer = styled(Drawer)(({ theme }) => ({
   },
 
   [`& .${classes.userProfileHidden}`]: {
-    display: "none",
+    display: 'none',
   },
 
   [`& .${classes.avatar}`]: {
@@ -98,15 +98,15 @@ const StyledDrawer = styled(Drawer)(({ theme }) => ({
   },
 
   [`& .${classes.amount}`]: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 
   [`& .${classes.accountBalanceHidden}`]: {
-    display: "none",
+    display: 'none',
   },
 
   [`& .${classes.cypressLogo}`]: {
-    width: "40%",
+    width: '40%',
   },
 }));
 
@@ -198,15 +198,15 @@ const NavDrawer: React.FC<Props> = ({
 }) => {
   const theme = useTheme();
   const [authState, sendAuth] = useActor(authService);
-  const showTemporaryDrawer = useMediaQuery(theme.breakpoints.only("xs"));
+  const showTemporaryDrawer = useMediaQuery(theme.breakpoints.only('xs'));
 
   const currentUser = authState?.context?.user;
-  const signOut = () => sendAuth("LOGOUT");
+  const signOut = () => sendAuth('LOGOUT');
 
   return (
     <StyledDrawer
       data-test="sidenav"
-      variant={showTemporaryDrawer ? "temporary" : "persistent"}
+      variant={showTemporaryDrawer ? 'temporary' : 'persistent'}
       classes={{
         paper: clsx(classes.drawerPaper, !drawerOpen && classes.drawerPaperClose),
       }}
@@ -253,7 +253,7 @@ const NavDrawer: React.FC<Props> = ({
             </>
           )}
         </Grid>
-        <Grid item style={{ width: "30%" }}></Grid>
+        <Grid item style={{ width: '30%' }}></Grid>
       </Grid>
       <Grid
         container

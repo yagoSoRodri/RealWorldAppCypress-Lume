@@ -1,14 +1,14 @@
-import React from "react";
-import { styled } from "@mui/material/styles";
-import clsx from "clsx";
+import React from 'react';
+import { styled } from '@mui/material/styles';
+import clsx from 'clsx';
 import {
   BaseActionObject,
   Interpreter,
   ResolveTypegenMeta,
   ServiceMap,
   TypegenDisabled,
-} from "xstate";
-import { useActor } from "@xstate/react";
+} from 'xstate';
+import { useActor } from '@xstate/react';
 import {
   AppBar,
   Toolbar,
@@ -19,22 +19,22 @@ import {
   useTheme,
   useMediaQuery,
   Link,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Menu as MenuIcon,
   Notifications as NotificationsIcon,
   AttachMoney as AttachMoneyIcon,
-} from "@mui/icons-material";
-import { Link as RouterLink, useLocation } from "react-router-dom";
+} from '@mui/icons-material';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
-import { DataContext, DataEvents, DataSchema } from "../machines/dataMachine";
-import TransactionNavTabs from "./TransactionNavTabs";
-import RWALogo from "./SvgRwaLogo";
-import RWALogoIcon from "./SvgRwaIconLogo";
+import { DataContext, DataEvents, DataSchema } from '../machines/dataMachine';
+import TransactionNavTabs from './TransactionNavTabs';
+import RWALogo from './SvgRwaLogo';
+import RWALogoIcon from './SvgRwaIconLogo';
 
 const drawerWidth = 240;
 
-const PREFIX = "NavBar";
+const PREFIX = 'NavBar';
 
 const classes = {
   toolbar: `${PREFIX}-toolbar`,
@@ -53,7 +53,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   },
 
   [`&.${classes.appBar}`]: {
-    transition: theme.transitions.create(["width", "margin"], {
+    transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -62,43 +62,43 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   [`&.${classes.appBarShift}`]: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
+    transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
 
   [`& .${classes.menuButtonHidden}`]: {
-    display: "none",
+    display: 'none',
   },
 
   [`& .${classes.title}`]: {
     flexGrow: 1,
-    textAlign: "center",
+    textAlign: 'center',
   },
 
   [`& .${classes.logo}`]: {
-    color: "white",
-    verticalAlign: "bottom",
+    color: 'white',
+    verticalAlign: 'bottom',
   },
 
   [`& .${classes.newTransactionButton}`]: {
     fontSize: 16,
-    backgroundColor: "#00C853",
+    backgroundColor: '#00C853',
     paddingTop: 5,
     paddingBottom: 5,
     paddingRight: 20,
-    fontWeight: "bold",
-    "&:hover": {
-      backgroundColor: "#4CAF50",
-      borderColor: "#00C853",
-      boxShadow: "none",
+    fontWeight: 'bold',
+    '&:hover': {
+      backgroundColor: '#4CAF50',
+      borderColor: '#00C853',
+      boxShadow: 'none',
     },
   },
 
   [`& .${classes.customBadge}`]: {
-    backgroundColor: "red",
-    color: "white",
+    backgroundColor: 'red',
+    color: 'white',
   },
 }));
 
@@ -121,7 +121,7 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
   const [notificationsState] = useActor(notificationsService);
 
   const allNotifications = notificationsState?.context?.results;
-  const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
+  const xsBreakpoint = useMediaQuery(theme.breakpoints.only('xs'));
 
   return (
     <StyledAppBar
@@ -149,7 +149,7 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
         >
           <Link
             to="/"
-            style={{ color: "#fff", textDecoration: "none" }}
+            style={{ color: '#fff', textDecoration: 'none' }}
             component={RouterLink}
             underline="hover"
           >
@@ -186,7 +186,7 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
           </Badge>
         </IconButton>
       </Toolbar>
-      {(match.pathname === "/" || RegExp("/(?:public|contacts|personal)").test(match.pathname)) && (
+      {(match.pathname === '/' || RegExp('/(?:public|contacts|personal)').test(match.pathname)) && (
         <TransactionNavTabs />
       )}
     </StyledAppBar>

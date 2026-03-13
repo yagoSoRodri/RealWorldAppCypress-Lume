@@ -1,7 +1,7 @@
-import React from "react";
-import { ListItem, ListItemText } from "@mui/material";
+import React from 'react';
+import { ListItem, ListItemText } from '@mui/material';
 
-import { Comment } from "../models";
+import { Comment } from '../models';
 
 export interface CommentListItemProps {
   comment: Comment;

@@ -1,22 +1,22 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
-import { Router } from "react-router-dom";
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { Router } from 'react-router-dom';
 import {
   createTheme,
   ThemeProvider,
   Theme,
   StyledEngineProvider,
   adaptV4Theme,
-} from "@mui/material";
-import { Auth0Provider } from "@auth0/auth0-react";
-import AppAuth0 from "./containers/AppAuth0";
-import { history } from "./utils/historyUtils";
+} from '@mui/material';
+import { Auth0Provider } from '@auth0/auth0-react';
+import AppAuth0 from './containers/AppAuth0';
+import { history } from './utils/historyUtils';
 
 const theme = createTheme(
   adaptV4Theme({
     palette: {
       secondary: {
-        main: "#fff",
+        main: '#fff',
       },
     },
   })
@@ -27,7 +27,7 @@ const onRedirectCallback = (appState: any) => {
   history.replace((appState && appState.returnTo) || window.location.pathname);
 };
 
-const root = createRoot(document.getElementById("root")!);
+const root = createRoot(document.getElementById('root')!);
 
 /* istanbul ignore if */
 if (process.env.VITE_AUTH0) {
@@ -51,5 +51,5 @@ if (process.env.VITE_AUTH0) {
     </Auth0Provider>
   );
 } else {
-  console.error("Auth0 is not configured.");
+  console.error('Auth0 is not configured.');
 }

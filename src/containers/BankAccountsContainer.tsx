@@ -1,20 +1,20 @@
-import React, { useEffect } from "react";
-import { styled } from "@mui/material/styles";
-import { useActor } from "@xstate/react";
+import React, { useEffect } from 'react';
+import { styled } from '@mui/material/styles';
+import { useActor } from '@xstate/react';
 import {
   BaseActionObject,
   Interpreter,
   ResolveTypegenMeta,
   ServiceMap,
   TypegenDisabled,
-} from "xstate";
-import { Link as RouterLink, useRouteMatch } from "react-router-dom";
-import { Grid, Button, Paper, Typography } from "@mui/material";
+} from 'xstate';
+import { Link as RouterLink, useRouteMatch } from 'react-router-dom';
+import { Grid, Button, Paper, Typography } from '@mui/material';
 
-import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
-import { DataContext, DataEvents, DataSchema } from "../machines/dataMachine";
-import BankAccountForm from "../components/BankAccountForm";
-import BankAccountList from "../components/BankAccountList";
+import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from '../machines/authMachine';
+import { DataContext, DataEvents, DataSchema } from '../machines/dataMachine';
+import BankAccountForm from '../components/BankAccountForm';
+import BankAccountList from '../components/BankAccountList';
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, AuthMachineSchema, AuthMachineEvents, any, any>;
@@ -26,7 +26,7 @@ export interface Props {
     ResolveTypegenMeta<TypegenDisabled, DataEvents, BaseActionObject, ServiceMap>
   >;
 }
-const PREFIX = "BankAccountsContainer";
+const PREFIX = 'BankAccountsContainer';
 
 const classes = {
   paper: `${PREFIX}-paper`,
@@ -35,9 +35,9 @@ const classes = {
 const StyledPaper = styled(Paper)(({ theme }) => ({
   [`&.${classes.paper}`]: {
     padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
   },
 }));
 
@@ -50,18 +50,18 @@ const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsServi
   const currentUser = authState?.context.user;
 
   const createBankAccount = (payload: any) => {
-    sendBankAccounts({ type: "CREATE", ...payload });
+    sendBankAccounts({ type: 'CREATE', ...payload });
   };
 
   const deleteBankAccount = (payload: any) => {
-    sendBankAccounts({ type: "DELETE", ...payload });
+    sendBankAccounts({ type: 'DELETE', ...payload });
   };
 
   useEffect(() => {
-    sendBankAccounts("FETCH");
+    sendBankAccounts('FETCH');
   }, [sendBankAccounts]);
 
-  if (match.url === "/bankaccounts/new" && currentUser?.id) {
+  if (match.url === '/bankaccounts/new' && currentUser?.id) {
     return (
       <StyledPaper className={classes.paper}>
         <Typography component="h2" variant="h6" color="primary" gutterBottom>

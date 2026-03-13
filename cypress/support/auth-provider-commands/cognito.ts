@@ -1,10 +1,10 @@
-import { Amplify } from "aws-amplify";
-import { fetchAuthSession, signIn } from "aws-amplify/auth";
+import { Amplify } from 'aws-amplify';
+import { fetchAuthSession, signIn } from 'aws-amplify/auth';
 
-Amplify.configure(Cypress.env("awsConfig"));
+Amplify.configure(Cypress.env('awsConfig'));
 
 const fetchJwts = async (username: string, password: string) => {
-  const options = { authFlowType: "USER_PASSWORD_AUTH" as const };
+  const options = { authFlowType: 'USER_PASSWORD_AUTH' as const };
   await signIn({ username, password, options });
   const authSession = await fetchAuthSession();
   const tokens = authSession.tokens!;
@@ -20,14 +20,14 @@ const fetchJwts = async (username: string, password: string) => {
 type JwtResponse = Awaited<ReturnType<typeof fetchJwts>>;
 
 // Amazon Cognito
-Cypress.Commands.add("loginByCognitoApi", (username: string, password: string) => {
+Cypress.Commands.add('loginByCognitoApi', (username: string, password: string) => {
   const log = Cypress.log({
-    displayName: "COGNITO LOGIN",
+    displayName: 'COGNITO LOGIN',
     message: [`🔐 Authenticating | ${username}`],
     autoEnd: false,
   });
 
-  log.snapshot("before");
+  log.snapshot('before');
 
   cy.wrap(fetchJwts(username, password), { log: false }).then((unknownJwts) => {
     const { idToken, accessToken, clientId, accessTokenSub } = unknownJwts as JwtResponse;
@@ -40,29 +40,29 @@ Cypress.Commands.add("loginByCognitoApi", (username: string, password: string) =
     ls.setItem(`${keyPrefixWithUsername}.accessToken`, accessToken);
     ls.setItem(`${keyPrefix}.LastAuthUser`, accessTokenSub);
 
-    log.snapshot("after");
+    log.snapshot('after');
     log.end();
   });
 
-  cy.visit("/");
+  cy.visit('/');
 });
 
 // Amazon Cognito
-Cypress.Commands.add("loginByCognito", (username, password) => {
+Cypress.Commands.add('loginByCognito', (username, password) => {
   cy.session(
     `cognito-${username}`,
     () => {
       Cypress.log({
-        displayName: "COGNITO LOGIN",
+        displayName: 'COGNITO LOGIN',
         message: [`🔐 Authenticating | ${username}`],
         // @ts-ignore
         autoEnd: false,
       });
 
-      cy.visit("/");
+      cy.visit('/');
 
       cy.origin(
-        Cypress.env("cognito_domain"),
+        Cypress.env('cognito_domain'),
         {
           args: {
             username,
@@ -70,7 +70,7 @@ Cypress.Commands.add("loginByCognito", (username, password) => {
           },
         },
         ({ username, password }) => {
-          cy.contains("Sign in with your email and password");
+          cy.contains('Sign in with your email and password');
           // cognito log in page has some elements of the same id but are off screen. we only want the visible elements to log in
           cy.get('input[name="username"]:visible').type(username);
           cy.get('input[name="password"]:visible').type(password, {
@@ -85,11 +85,11 @@ Cypress.Commands.add("loginByCognito", (username, password) => {
       cy.wait(2000);
 
       // verify we have made it passed the login screen
-      cy.contains("Get Started").should("be.visible");
+      cy.contains('Get Started').should('be.visible');
     },
     {
       validate() {
-        cy.visit("/");
+        cy.visit('/');
         /**
          * NOTE: We recommend validating sessions by either validating
          * localStorage or cookies values, or possibly accessing an
@@ -100,7 +100,7 @@ Cypress.Commands.add("loginByCognito", (username, password) => {
          * and not blocked by a login screen
          */
         // revalidate our session to make sure we are logged in
-        cy.contains("Get Started").should("be.visible");
+        cy.contains('Get Started').should('be.visible');
       },
     }
   );

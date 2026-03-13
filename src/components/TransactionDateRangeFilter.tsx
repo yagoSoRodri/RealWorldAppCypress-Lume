@@ -1,23 +1,23 @@
-import React, { useState } from "react";
-import { styled } from "@mui/material/styles";
-import { format as formatDate } from "date-fns";
-import { Popover, Chip, useTheme, Drawer, Button, useMediaQuery, colors } from "@mui/material";
-import { ArrowDropDown as ArrowDropDownIcon, Cancel as CancelIcon } from "@mui/icons-material";
-import Calendar from "react-calendar";
+import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
+import { format as formatDate } from 'date-fns';
+import { Popover, Chip, useTheme, Drawer, Button, useMediaQuery, colors } from '@mui/material';
+import { ArrowDropDown as ArrowDropDownIcon, Cancel as CancelIcon } from '@mui/icons-material';
+import Calendar from 'react-calendar';
 
-import "react-calendar/dist/Calendar.css";
-import { TransactionDateRangePayload, Value, ValuePiece } from "../models";
-import { hasDateQueryFields, localDateToUTCISOString } from "../utils/transactionUtils";
+import 'react-calendar/dist/Calendar.css';
+import { TransactionDateRangePayload, Value, ValuePiece } from '../models';
+import { hasDateQueryFields, localDateToUTCISOString } from '../utils/transactionUtils';
 
-const PREFIX = "TransactionListDateRangeFilter";
+const PREFIX = 'TransactionListDateRangeFilter';
 
 const classes = {
   popover: `${PREFIX}-popover`,
 };
 
-const Root = styled("div")(({ theme }) => ({
+const Root = styled('div')(({ theme }) => ({
   [`& .${classes.popover}`]: {
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down('md')]: {
       top: 0,
       left: 0,
       right: 0,
@@ -40,7 +40,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   resetDateRange,
 }) => {
   const theme = useTheme();
-  const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
+  const xsBreakpoint = useMediaQuery(theme.breakpoints.only('xs'));
   const queryHasDateFields = dateRangeFilters && hasDateQueryFields(dateRangeFilters);
   const [calendarValue, setCalendarValue] = useState<Value>(null);
 
@@ -68,10 +68,10 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   };
 
   const dateRangeOpen = Boolean(dateRangeAnchorEl);
-  const dateRangeId = dateRangeOpen ? "date-range-popover" : undefined;
+  const dateRangeId = dateRangeOpen ? 'date-range-popover' : undefined;
 
   const formatButtonDate = (date: Date) => {
-    return formatDate(date, "MMM, d yyyy");
+    return formatDate(date, 'MMM, d yyyy');
   };
 
   const dateRangeLabel = (dateRangeFields: Value) => {
@@ -90,7 +90,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           variant="outlined"
           onClick={handleDateRangeClick}
           data-test="transaction-list-filter-date-range-button"
-          label={"Date: ALL"}
+          label={'Date: ALL'}
           deleteIcon={<ArrowDropDownIcon />}
           onDelete={handleDateRangeClick}
         />
@@ -116,12 +116,12 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           anchorEl={dateRangeAnchorEl}
           onClose={handleDateRangeClose}
           anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
+            vertical: 'bottom',
+            horizontal: 'left',
           }}
           transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
+            vertical: 'top',
+            horizontal: 'left',
           }}
           className={classes.popover}
         >
@@ -186,8 +186,8 @@ export function RangeCalendar({
       data-test={dataTest}
       style={{
         width,
-        maxWidth: "100%",
-        background: color["400"],
+        maxWidth: '100%',
+        background: color['400'],
         padding: 8,
         borderRadius: 8,
       }}

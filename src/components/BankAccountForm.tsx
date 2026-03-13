@@ -1,23 +1,23 @@
-import React from "react";
-import { styled } from "@mui/material/styles";
-import { TextField, Button, Grid } from "@mui/material";
-import { Formik, Form, Field, FieldProps } from "formik";
-import { string, object } from "yup";
-import { BankAccountPayload, User } from "../models";
-import { useHistory } from "react-router";
+import React from 'react';
+import { styled } from '@mui/material/styles';
+import { TextField, Button, Grid } from '@mui/material';
+import { Formik, Form, Field, FieldProps } from 'formik';
+import { string, object } from 'yup';
+import { BankAccountPayload, User } from '../models';
+import { useHistory } from 'react-router';
 
 const validationSchema = object({
-  bankName: string().min(5, "Must contain at least 5 characters").required("Enter a bank name"),
+  bankName: string().min(5, 'Must contain at least 5 characters').required('Enter a bank name'),
   routingNumber: string()
-    .length(9, "Must contain a valid routing number")
-    .required("Enter a valid bank routing number"),
+    .length(9, 'Must contain a valid routing number')
+    .required('Enter a valid bank routing number'),
   accountNumber: string()
-    .min(9, "Must contain at least 9 digits")
-    .max(12, "Must contain no more than 12 digits")
-    .required("Enter a valid bank account number"),
+    .min(9, 'Must contain at least 9 digits')
+    .max(12, 'Must contain no more than 12 digits')
+    .required('Enter a valid bank account number'),
 });
 
-const PREFIX = "BankAccountForm";
+const PREFIX = 'BankAccountForm';
 
 const classes = {
   paper: `${PREFIX}-paper`,
@@ -28,13 +28,13 @@ const classes = {
 const StyledFormik = styled(Formik)(({ theme }) => ({
   [`& .${classes.paper}`]: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 
   [`& .${classes.form}`]: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
 
@@ -44,7 +44,7 @@ const StyledFormik = styled(Formik)(({ theme }) => ({
 }));
 
 export interface BankAccountFormProps {
-  userId: User["id"];
+  userId: User['id'];
   createBankAccount: Function;
   onboarding?: boolean;
 }
@@ -58,9 +58,9 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
 
   const initialValues: BankAccountPayload = {
     userId,
-    bankName: "",
-    accountNumber: "",
-    routingNumber: "",
+    bankName: '',
+    accountNumber: '',
+    routingNumber: '',
   };
 
   return (
@@ -73,7 +73,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
         createBankAccount({ ...values, userId });
 
         if (!onboarding) {
-          history.push("/bankaccounts");
+          history.push('/bankaccounts');
         }
       }}
     >
@@ -86,12 +86,12 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 margin="dense"
                 fullWidth
                 required
-                id={"bankaccount-bankName-input"}
+                id={'bankaccount-bankName-input'}
                 type="text"
                 placeholder="Bank Name"
-                data-test={"bankaccount-bankName-input"}
+                data-test={'bankaccount-bankName-input'}
                 error={(touched || value !== initialValue) && Boolean(error)}
-                helperText={touched || value !== initialValue ? error : ""}
+                helperText={touched || value !== initialValue ? error : ''}
                 {...field}
               />
             )}
@@ -103,12 +103,12 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 margin="dense"
                 fullWidth
                 required
-                id={"bankaccount-routingNumber-input"}
+                id={'bankaccount-routingNumber-input'}
                 type="text"
                 placeholder="Routing Number"
-                data-test={"bankaccount-routingNumber-input"}
+                data-test={'bankaccount-routingNumber-input'}
                 error={(touched || value !== initialValue) && Boolean(error)}
-                helperText={touched || value !== initialValue ? error : ""}
+                helperText={touched || value !== initialValue ? error : ''}
                 {...field}
               />
             )}
@@ -120,12 +120,12 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 margin="dense"
                 fullWidth
                 required
-                id={"bankaccount-accountNumber-input"}
+                id={'bankaccount-accountNumber-input'}
                 type="text"
                 placeholder="Account Number"
-                data-test={"bankaccount-accountNumber-input"}
+                data-test={'bankaccount-accountNumber-input'}
                 error={(touched || value !== initialValue) && Boolean(error)}
-                helperText={touched || value !== initialValue ? error : ""}
+                helperText={touched || value !== initialValue ? error : ''}
                 {...field}
               />
             )}

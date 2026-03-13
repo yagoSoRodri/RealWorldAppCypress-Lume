@@ -1,12 +1,12 @@
 class LoginPage {
   get usernameInput() {
-    return cy.getBySel("signin-username");
+    return cy.getBySel('signin-username');
   }
   get passwordInput() {
-    return cy.getBySel("signin-password");
+    return cy.getBySel('signin-password');
   }
   get submitBtn() {
-    return cy.getBySel("signin-submit");
+    return cy.getBySel('signin-submit');
   }
 
   fillLogin(username, password) {

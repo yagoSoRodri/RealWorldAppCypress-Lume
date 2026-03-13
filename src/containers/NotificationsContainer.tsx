@@ -1,20 +1,20 @@
-import React, { useEffect } from "react";
-import { styled } from "@mui/material/styles";
+import React, { useEffect } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   BaseActionObject,
   Interpreter,
   ResolveTypegenMeta,
   ServiceMap,
   TypegenDisabled,
-} from "xstate";
-import { useActor } from "@xstate/react";
-import { Paper, Typography } from "@mui/material";
-import { NotificationUpdatePayload } from "../models";
-import NotificationList from "../components/NotificationList";
-import { DataContext, DataSchema, DataEvents } from "../machines/dataMachine";
-import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
+} from 'xstate';
+import { useActor } from '@xstate/react';
+import { Paper, Typography } from '@mui/material';
+import { NotificationUpdatePayload } from '../models';
+import NotificationList from '../components/NotificationList';
+import { DataContext, DataSchema, DataEvents } from '../machines/dataMachine';
+import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from '../machines/authMachine';
 
-const PREFIX = "NotificationsContainer";
+const PREFIX = 'NotificationsContainer';
 
 const classes = {
   paper: `${PREFIX}-paper`,
@@ -22,11 +22,11 @@ const classes = {
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   [`&.${classes.paper}`]: {
-    minHeight: "90vh",
+    minHeight: '90vh',
     padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
   },
 }));
 
@@ -46,11 +46,11 @@ const NotificationsContainer: React.FC<Props> = ({ authService, notificationsSer
   const [notificationsState, sendNotifications] = useActor(notificationsService);
 
   useEffect(() => {
-    sendNotifications({ type: "FETCH" });
+    sendNotifications({ type: 'FETCH' });
   }, [authState, sendNotifications]);
 
   const updateNotification = (payload: NotificationUpdatePayload) =>
-    sendNotifications({ type: "UPDATE", ...payload });
+    sendNotifications({ type: 'UPDATE', ...payload });
 
   return (
     <StyledPaper className={classes.paper}>

@@ -1,14 +1,14 @@
-import React from "react";
-import { styled } from "@mui/material/styles";
-import { get } from "lodash/fp";
-import { useTheme, useMediaQuery, Divider } from "@mui/material";
-import { InfiniteLoader, List, Index } from "react-virtualized";
-import "react-virtualized/styles.css"; // only needs to be imported once
+import React from 'react';
+import { styled } from '@mui/material/styles';
+import { get } from 'lodash/fp';
+import { useTheme, useMediaQuery, Divider } from '@mui/material';
+import { InfiniteLoader, List, Index } from 'react-virtualized';
+import 'react-virtualized/styles.css'; // only needs to be imported once
 
-import TransactionItem from "./TransactionItem";
-import { TransactionResponseItem, TransactionPagination } from "../models";
+import TransactionItem from './TransactionItem';
+import { TransactionResponseItem, TransactionPagination } from '../models';
 
-const PREFIX = "TransactionInfiniteList";
+const PREFIX = 'TransactionInfiniteList';
 
 const classes = {
   transactionList: `${PREFIX}-transactionList`,
@@ -16,11 +16,11 @@ const classes = {
 
 const StyledInfiniteLoader = styled(InfiniteLoader)(({ theme }) => ({
   [`& .${classes.transactionList}`]: {
-    width: "100%",
-    minHeight: "80vh",
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
+    width: '100%',
+    minHeight: '80vh',
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
   },
 }));
 
@@ -36,8 +36,8 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   pagination,
 }) => {
   const theme = useTheme();
-  const isXsBreakpoint = useMediaQuery(theme.breakpoints.down("sm"));
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isXsBreakpoint = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const itemCount = pagination.hasNextPages ? transactions.length + 1 : transactions.length;
 
@@ -58,7 +58,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
       return (
         <div key={key} style={style}>
           <TransactionItem transaction={transaction} />
-          <Divider variant={isMobile ? "fullWidth" : "inset"} />
+          <Divider variant={isMobile ? 'fullWidth' : 'inset'} />
         </div>
       );
     }

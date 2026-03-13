@@ -1,16 +1,16 @@
-import React, { ReactNode } from "react";
-import { styled } from "@mui/material/styles";
-import { Paper, Button, ListSubheader, Grid } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
-import { isEmpty } from "lodash/fp";
+import React, { ReactNode } from 'react';
+import { styled } from '@mui/material/styles';
+import { Paper, Button, ListSubheader, Grid } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import { isEmpty } from 'lodash/fp';
 
-import SkeletonList from "./SkeletonList";
-import { TransactionResponseItem, TransactionPagination } from "../models";
-import EmptyList from "./EmptyList";
-import TransactionInfiniteList from "./TransactionInfiniteList";
-import TransferMoneyIllustration from "./SvgUndrawTransferMoneyRywa";
+import SkeletonList from './SkeletonList';
+import { TransactionResponseItem, TransactionPagination } from '../models';
+import EmptyList from './EmptyList';
+import TransactionInfiniteList from './TransactionInfiniteList';
+import TransferMoneyIllustration from './SvgUndrawTransferMoneyRywa';
 
-const PREFIX = "TransactionList";
+const PREFIX = 'TransactionList';
 
 const classes = {
   paper: `${PREFIX}-paper`,
@@ -63,7 +63,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
             direction="column"
             justifyContent="center"
             alignItems="center"
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             spacing={2}
           >
             <Grid item>
