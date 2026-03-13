@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import Dinero from "dinero.js";
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
@@ -91,8 +92,8 @@ describe("New Transaction", function () {
 
   it("navigates to the new transaction form, selects a user and submits a transaction request", function () {
     const request = {
-      amount: "95",
-      description: "Fancy Hotel 🏨",
+      amount: faker.finance.amount({ min: 10, max: 100, dec: 2 }),
+      description: faker.lorem.sentence(),
     };
 
     cy.getBySelLike("new-transaction").click();
@@ -149,21 +150,21 @@ describe("New Transaction", function () {
 
     const transactionPayload = {
       transactionType: "payment",
-      amount: 25,
-      description: "Indian Food",
+      amount: Number(faker.finance.amount({ min: 10, max: 100, dec: 0 })),
+      description: faker.lorem.sentence(),
       sender: ctx.user,
       receiver: ctx.contact,
     };
 
-    // first let's grab the current balance from the UI
+    
     let startBalance: string;
     if (!isMobile()) {
-      // only check the balance display in desktop resolution
-      // as it is NOT shown on mobile screen
+      
+      
       cy.get("[data-test=sidenav-user-balance]")
         .invoke("text")
         .then((x) => {
-          startBalance = x; // something like "$1,484.81"
+          startBalance = x; 
           expect(startBalance).to.match(/\$\d/);
         });
     }
@@ -173,11 +174,11 @@ describe("New Transaction", function () {
     cy.getBySel("new-transaction-create-another-transaction").should("be.visible");
 
     if (!isMobile()) {
-      // make sure the new balance is displayed
+      
       cy.get("[data-test=sidenav-user-balance]").should(($el) => {
-        // here we only make sure the text has changed
-        // we could also convert the balance to actual number
-        // and confirm the new balance is the start balance - amount
+        
+        
+        
         expect($el.text()).to.not.equal(startBalance);
       });
     }
@@ -200,8 +201,8 @@ describe("New Transaction", function () {
   it("submits a transaction request and accepts the request for the receiver", function () {
     const transactionPayload = {
       transactionType: "request",
-      amount: 100,
-      description: "Fancy Hotel",
+      amount: Number(faker.finance.amount({ min: 10, max: 100, dec: 0 })),
+      description: faker.lorem.sentence(),
       sender: ctx.user,
       receiver: ctx.contact,
     };
@@ -269,14 +270,14 @@ describe("New Transaction", function () {
         cy.log(`Searching by **${attr}**`);
         cy.getBySel("user-list-search-input").type(targetUser[attr] as string, { force: true });
         cy.wait("@usersSearch")
-          // make sure the backend returns some results
+          
           .its("response.body.results")
           .should("have.length.gt", 0)
           .its("length")
           .then((resultsN) => {
             cy.getBySelLike("user-list-item")
-              // make sure the list of results is fully updated
-              // and shows the number of results returned from the backend
+              
+              
               .should("have.length", resultsN)
               .first()
               .contains(targetUser[attr] as string);

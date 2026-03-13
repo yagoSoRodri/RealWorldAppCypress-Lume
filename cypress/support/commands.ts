@@ -390,3 +390,23 @@ Cypress.Commands.add("loginByGoogleApi", () => {
     }
   );
 });
+
+Cypress.Commands.add("loginViaApi", (username, password) => {
+  cy.request("POST", `${Cypress.env("apiUrl")}/login`, {
+    username,
+    password,
+  }).then((response) => {
+    window.localStorage.setItem(
+      process.env.VITE_AUTH_TOKEN_NAME!,
+      response.body.token
+    );
+    window.localStorage.setItem(
+      "authState",
+      JSON.stringify({
+        value: "loggedIn",
+        context: { user: response.body.user },
+      })
+    );
+  });
+});
+

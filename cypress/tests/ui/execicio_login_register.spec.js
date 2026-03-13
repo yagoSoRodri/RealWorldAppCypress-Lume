@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker';
+import LoginPage from '../../support/pages/LoginPage';
 describe('Login com sucesso', () => {
     beforeEach(() => {
         cy.task("db:seed");
@@ -42,12 +44,13 @@ describe('Registro de novo usuário com sucesso', () => {
         cy.intercept("POST", "/users").as("signup");
         cy.visit("/signup");
 
+        const password = faker.internet.password();
         const newUser = {
-            firstName: "Novo",
-            lastName: "Usuario",
-            username: "novousuario123",
-            password: "password123",
-            confirmPassword: "password123"
+            firstName: faker.person.firstName(),
+            lastName: faker.person.lastName(),
+            username: faker.internet.userName(),
+            password: password,
+            confirmPassword: password
         };
 
         cy.getBySel("signup-first-name").type(newUser.firstName);

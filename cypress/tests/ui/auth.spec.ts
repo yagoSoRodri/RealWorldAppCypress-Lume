@@ -1,5 +1,6 @@
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
+import { faker } from "@faker-js/faker";
 
 const apiGraphQL = `${Cypress.env("apiUrl")}/graphql`;
 
@@ -48,20 +49,18 @@ describe("User Sign-up and Login", function () {
   });
 
   it("should allow a visitor to sign-up, login, and logout", function () {
+    const password = faker.internet.password();
     const userInfo = {
-      firstName: "Bob",
-      lastName: "Ross",
-      username: "PainterJoy90",
-      password: "s3cret",
+      firstName: (faker as any).person.firstName(),
+      lastName: (faker as any).person.lastName(),
+      username: faker.internet.userName(),
+      password,
     };
 
-    // Sign-up User
     cy.visit("/");
-
     cy.getBySel("signup").click();
     cy.getBySel("signup-title").should("be.visible").and("contain", "Sign Up");
     cy.visualSnapshot("Sign Up Title");
-
     cy.getBySel("signup-first-name").type(userInfo.firstName);
     cy.getBySel("signup-last-name").type(userInfo.lastName);
     cy.getBySel("signup-username").type(userInfo.username);
@@ -71,10 +70,8 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("signup-submit").click();
     cy.wait("@signup");
 
-    // Login User
     cy.login(userInfo.username, userInfo.password);
 
-    // Onboarding
     cy.getBySel("user-onboarding-dialog").should("be.visible");
     cy.getBySel("list-skeleton").should("not.exist");
     cy.getBySel("nav-top-notifications-count").should("exist");
@@ -99,7 +96,6 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("transaction-list").should("be.visible");
     cy.visualSnapshot("Transaction List is visible after User Onboarding");
 
-    // Logout User
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
     }

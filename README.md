@@ -1,101 +1,112 @@
-# 🚀 Cypress Real World App - Exercícios de Automação
+# RealWorldApp Cypress — Framework Lume
 
-Este projeto é um fork do [Cypress Real World App (RWA)](https://github.com/cypress-io/cypress-realworld-app), uma aplicação de pagamentos completa usada para demonstrar padrões de teste com Cypress.
-
----
-
-## 🎯 Objetivo do Projeto
-Este repositório contém a implementação de casos de teste automatizados focados em fluxos críticos de usuário, utilizando **Cypress** com **JavaScript**.
-
-### 🛠️ Tecnologias Utilizadas
-- **Framework de Teste:** [Cypress](https://www.cypress.io/)
-- **Linguagem:** JavaScript
-- **App Base:** React, Express, lowdb.
+Projeto de automação de testes end-to-end construído sobre a base do **RealWorld App**, utilizando **Cypress** com a arquitetura proprietária **Lume**. O objetivo é demonstrar domínio técnico em automação de qualidade com práticas modernas de engenharia de software.
 
 ---
 
-## 🧪 Exercícios Realizados
+## Pilares Técnicos
 
-Os testes foram desenvolvidos para validar as três principais funcionalidades da aplicação:
+### Arquitetura Híbrida (Page Objects + App Actions)
 
-### 1. Autenticação e Registro 🔐
-- **Arquivo:** `cypress/tests/ui/execicio_login_register.spec.js`
-- **Cenários:**
-  - Login com sucesso usando usuário válido.
-  - Tentativa de login com credenciais inválidas (validação de erro).
-  - Registro de novo usuário com fluxo completo.
-  - Validação de campos obrigatórios no formulário de cadastro.
+- Implementação do padrão **Page Objects** do framework Lume sobre a estrutura nativa do RealWorld App
+- Separação rigorosa de responsabilidades:
+  - **Pages**: contêm exclusivamente localizadores de elementos e métodos de ação
+  - **Testes (.cy.js / .spec.ts)**: concentram todas as asserções (`should`, `expect`)
+- Estrutura organizada em `cypress/support/pages/` para máxima escalabilidade
 
-### 2. Envio de Dinheiro (Transações) 💸
-- **Arquivo:** `cypress/tests/ui/exercicio_enviar_dinheiro.spec.js`
-- **Cenários:**
-  - Envio de dinheiro com saldo suficiente.
-  - Validação de atualização de saldo do remetente e destinatário.
-  - Tentativa de envio com saldo insuficiente (validação de regra de negócio).
+### Massa de Dados Resiliente
 
-### 3. Histórico de Transações 📋
-- **Arquivo:** `cypress/tests/ui/exercicio_historico_transacoes.spec.js`
-- **Cenários:**
-  - Visualização da lista de transações pessoais.
-  - Detalhamento de uma transação específica.
-  - Filtros por data e valor.
-  - Paginação dos resultados.
-  - Validação de "Empty State" (quando não há transações no filtro).
+- Utilização da biblioteca **@faker-js/faker** para geração dinâmica de dados a cada execução
+- Campos como nome, sobrenome, usuário e senha são criados programaticamente, eliminando dependência de dados estáticos em fixtures JSON
+- Cobertura ampliada de **casos de borda** através da aleatoriedade controlada dos inputs
+
+### Integração Contínua (CI/CD)
+
+- Pipeline configurado via **GitHub Actions** no arquivo `.github/workflows/cypress.yml`
+- Execução automatizada em cada `push` e `pull_request` na branch `main`
+- Ambiente padronizado em **Ubuntu Latest** com Chrome headless
+- Upload automático de **screenshots e vídeos** como artefatos em caso de falha, garantindo rastreabilidade
+
+### Expertise em Banco de Dados
+
+- Projeto preparado para **validações de persistência direta via SQL**
+- Integração configurada através de `cy.task('queryDatabase')` com suporte a **PostgreSQL**
+- Possibilidade de verificar se registros foram corretamente persistidos após ações de UI
+
+### Clean Code
+
+- Seletores resilientes baseados no atributo `data-test`, evitando dependência de classes CSS ou IDs frágeis
+- Código autoexplicativo e sem comentários desnecessários
+- Comandos customizados (`cy.getBySel`, `cy.loginViaApi`) para redução de duplicação e aumento da legibilidade
 
 ---
 
-## 📁 Estrutura de Pastas dos Testes
+## Estrutura do Projeto
 
-```text
+```
 cypress/
-  └── tests/
-      └── ui/
-          ├── execicio_login_register.spec.js
-          ├── exercicio_enviar_dinheiro.spec.js
-          └── exercicio_historico_transacoes.spec.js
+├── support/
+│   ├── pages/
+│   │   └── LoginPage.js
+│   ├── commands.ts
+│   └── e2e.ts
+├── tests/
+│   ├── ui/
+│   │   ├── auth.spec.ts
+│   │   ├── execicio_login_register.spec.js
+│   │   └── ...
+│   └── api/
+│       └── ...
+├── fixtures/
+└── videos/
 ```
 
 ---
 
-## 🎥 Evidências (Vídeos)
+## Pré-requisitos
 
-Sempre que os testes são executados via terminal (`cypress run`), o Cypress gera automaticamente vídeos da execução.
-
-- **Localização:** `cypress/videos/`
-- **Arquivos:**
-  - `execicio_login_register.spec.js.mp4`
-  - `exercicio_enviar_dinheiro.spec.js.mp4`
-  - `exercicio_historico_transacoes.spec.js.mp4`
+- **Node.js** (versão 20 ou superior)
+- **npm** ou **yarn**
+- **Google Chrome**
 
 ---
 
-## ⚙️ Como Executar os Testes
+## Instalação
 
-1. **Instalar dependências:**
-   ```bash
-   yarn install
-   ```
-
-2. **Iniciar a aplicação:**
-   ```bash
-   yarn dev
-   ```
-
-3. **Abrir o Cypress (Modo Interativo):**
-   ```bash
-   npx cypress open
-   ```
-
-4. **Executar via Terminal (Modo Headless):**
-   ```bash
-   npm run cypress:run -- --spec "cypress/tests/ui/exercicio_*"
-   ```
+```bash
+npm install
+```
 
 ---
 
-## 👤 Autor
-**Yago Souza Rodrigues**
-- GitHub: [@yagoSoRodri](https://github.com/yagoSoRodri)
+## Execução dos Testes
+
+**Modo interativo (Cypress GUI):**
+
+```bash
+npx cypress open
+```
+
+**Modo headless (CI/CD):**
+
+```bash
+npx cypress run --browser chrome --headless
+```
 
 ---
-> *Este projeto foi desenvolvido como parte de exercícios de aprendizado em automação de testes com Cypress.*
+
+## Tecnologias Utilizadas
+
+| Tecnologia | Finalidade |
+|---|---|
+| Cypress | Framework de testes E2E |
+| @faker-js/faker | Geração dinâmica de massa de dados |
+| GitHub Actions | Pipeline de integração contínua |
+| PostgreSQL (pg) | Validação de persistência via SQL |
+| TypeScript / JavaScript | Linguagens dos testes e configurações |
+
+---
+
+## Autor
+
+Desenvolvido como projeto de portfólio em engenharia de qualidade de software.
