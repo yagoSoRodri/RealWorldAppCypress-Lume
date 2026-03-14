@@ -1,0 +1,44 @@
+name: Cypress Tests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          # No RealWorld App, o 'npm run dev' garante que API e Front subam juntos
+          start: npm run dev
+          
+          # Espera o servidor na porta 3000 estar pronto
+          wait-on: 'http://localhost:3000'
+          
+          # Dá um tempo extra (3 min) pois o ambiente do GitHub pode ser lento
+          wait-on-timeout: 180
+          
+          browser: chrome
+          headless: true
+
+      - name: Upload Screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots/
+
+      - name: Upload Videos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos/
