@@ -11,7 +11,5 @@
       "StartCommand": "yarn dev:cognito"
     }
   },
-  "providers": [
-    "awscloudformation"
-  ]
+  "providers": ["awscloudformation"]
 }

@@ -5,13 +5,9 @@
     "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "cypres3a466349",
     "userPoolName": "cypressrealworldapp3a466349_userpool_3a466349",
-    "autoVerifiedAttributes": [
-      "email"
-    ],
+    "autoVerifiedAttributes": ["email"],
     "mfaConfiguration": "OFF",
-    "mfaTypes": [
-      "SMS Text Message"
-    ],
+    "mfaTypes": ["SMS Text Message"],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
     "emailVerificationSubject": "Your verification code",
@@ -19,18 +15,12 @@
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
-    "requiredAttributes": [
-      "email"
-    ],
+    "requiredAttributes": ["email"],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": true,
     "userpoolClientRefreshTokenValidity": 30,
-    "userpoolClientWriteAttributes": [
-      "email"
-    ],
-    "userpoolClientReadAttributes": [
-      "email"
-    ],
+    "userpoolClientWriteAttributes": ["email"],
+    "userpoolClientReadAttributes": ["email"],
     "userpoolClientLambdaRole": "cypres3a466349_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
     "authSelections": "identityPoolAndUserPool",
@@ -38,20 +28,12 @@
     "useDefault": "defaultSocial",
     "sharedId": "3a466349",
     "userPoolGroupList": [],
-    "usernameAttributes": [
-      "email"
-    ],
+    "usernameAttributes": ["email"],
     "authRoleArn": {
-      "Fn::GetAtt": [
-        "AuthRole",
-        "Arn"
-      ]
+      "Fn::GetAtt": ["AuthRole", "Arn"]
     },
     "unauthRoleArn": {
-      "Fn::GetAtt": [
-        "UnauthRole",
-        "Arn"
-      ]
+      "Fn::GetAtt": ["UnauthRole", "Arn"]
     },
     "breakCircularDependency": false,
     "useEnabledMfas": false,
@@ -64,4 +46,4 @@
     "serviceName": "Cognito",
     "authProviders": []
   }
-} 
+}

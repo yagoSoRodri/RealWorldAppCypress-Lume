@@ -111,12 +111,12 @@ npx cypress run --browser chrome --headless
 
 ## Tecnologias Utilizadas
 
-| Tecnologia              | Finalidade                            |
-| ----------------------- | ------------------------------------- |
-| Cypress                 | Framework de testes E2E               |
-| @faker-js/faker         | GeraÃ§Ã£o dinÃ¢mica de massa de dados    |
-| GitHub Actions          | Pipeline de integraÃ§Ã£o contÃ­nua       |
-| PostgreSQL (pg)         | ValidaÃ§Ã£o de persistÃªncia via SQL     |
+| Tecnologia              | Finalidade                              |
+| ----------------------- | --------------------------------------- |
+| Cypress                 | Framework de testes E2E                 |
+| @faker-js/faker         | GeraÃ§Ã£o dinÃ¢mica de massa de dados   |
+| GitHub Actions          | Pipeline de integraÃ§Ã£o contÃ­nua      |
+| PostgreSQL (pg)         | ValidaÃ§Ã£o de persistÃªncia via SQL    |
 | TypeScript / JavaScript | Linguagens dos testes e configuraÃ§Ãµes |
 
 ---
