@@ -120,4 +120,3 @@ jobs:
         with:
           name: final-report
           path: cypress/reports/html
-
