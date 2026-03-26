@@ -106,11 +106,17 @@ jobs:
 
       - name: Merge and Generate Final Report
         run: |
-          yarn report:merge
-          yarn report:generate
+          mkdir -p cypress/reports
+          if ls cypress/reports/*.json 1> /dev/null 2>&1; then
+            yarn report:merge
+            yarn report:generate
+          else
+            echo "⚠️ Nenhum relatório JSON encontrado. Pulando a geração do HTML final."
+          fi
 
       - name: Upload Final HTML Report
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: final-report
           path: cypress/reports/html
