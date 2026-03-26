@@ -1,5 +1,11 @@
 import { faker } from '@faker-js/faker';
 import { User } from '../../../src/models';
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
+import { userSchema, usersListSchema } from '../../support/schemas/user.schema';
+
+const ajv = new Ajv({ allErrors: true });
+addFormats(ajv);
 
 const apiUsers = `${Cypress.env('apiUrl')}/users`;
 
@@ -8,7 +14,7 @@ type TestUserCtx = {
   searchUser?: User;
 };
 
-describe('Users API', function () {
+describe('Users API', { env: { tags: ['@api', '@regression'] } }, function () {
   let ctx: TestUserCtx = {};
 
   before(() => {
@@ -28,10 +34,16 @@ describe('Users API', function () {
   });
 
   context('GET /users', function () {
-    it('gets a list of users', function () {
+    it('gets a list of users and validates contract', function () {
       cy.request('GET', apiUsers).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.results).length.to.be.greaterThan(1);
+
+        const validate = ajv.compile(usersListSchema);
+        const valid = validate(response.body);
+        if (!valid) {
+          throw new Error(`Contract validation failed: ${JSON.stringify(validate.errors)}`);
+        }
       });
     });
   });

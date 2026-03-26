@@ -4,7 +4,7 @@ import { faker } from '@faker-js/faker';
 
 const apiGraphQL = `${Cypress.env('apiUrl')}/graphql`;
 
-describe('User Sign-up and Login', function () {
+describe('User Sign-up and Login', { env: { tags: ['@smoke', '@regression'] } }, function () {
   beforeEach(function () {
     cy.task('db:seed');
 

@@ -1,53 +1,130 @@
-name: Cypress Tests
+name: Cypress RealWorld Pipeline
+
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
+  schedule:
+    # Rodar todos os dias às 09:00 BRT (12:00 UTC)
+    - cron: '0 12 * * *'
 
 jobs:
-  test:
+  install-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Static Analysis (Lint)
+        run: yarn lint
+
+      - name: Cache Build
+        id: cache-build
+        uses: actions/cache@v4
+        with:
+          path: |
+            dist
+            public
+          key: ${{ runner.os }}-build-${{ github.sha }}
+
+      - name: Run Build
+        if: steps.cache-build.outputs.cache-hit != 'true'
+        run: yarn build
+
+  cypress-run:
+    needs: install-and-lint
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        group: ["api", "ui-1", "ui-2", "other"]
+        # Grupos de testes baseados em tags
+        tags: ['@smoke', '@api', '@regression']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Restore Build
+        uses: actions/cache@v4
+        with:
+          path: |
+            dist
+            public
+          key: ${{ runner.os }}-build-${{ github.sha }}
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
         env:
           PORT: 3000
         with:
-          record: false
-          parallel: false
-          build: yarn build
+          install: false
           start: yarn start:ci
-          wait-on: "http://localhost:3000, http://localhost:3001"
+          wait-on: 'http://localhost:3000, http://localhost:3001'
           wait-on-timeout: 200
           browser: chrome
-          spec: >-
-            ${{
-              matrix.group == 'api' && 'cypress/tests/api/**/*' ||
-              matrix.group == 'ui-1' && 'cypress/tests/ui/{auth,bankaccounts,execicio,exercicio_enviar,exercicio_historico}*' ||
-              matrix.group == 'ui-2' && 'cypress/tests/ui/{new-transaction,notifications,transaction-feeds,transaction-view,user-settings}*' ||
-              'cypress/tests/{demo,ui-auth-providers}/**/*'
-            }}
+          env: grepTags=${{ matrix.tags }}
 
-      - name: Upload Screenshots
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: cypress-screenshots-${{ matrix.group }}
-          path: cypress/screenshots/
-
-      - name: Upload Videos
-        uses: actions/upload-artifact@v4
+      - name: Upload Report Artifacts
         if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: cypress-videos-${{ matrix.group }}
-          path: cypress/videos/
+          name: cypress-reports-${{ matrix.tags }}
+          path: cypress/reports/
+
+  publish-report:
+    if: always()
+    needs: cypress-run
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download all reports
+        uses: actions/download-artifact@v4
+        with:
+          path: cypress/reports
+          pattern: cypress-reports-*
+          merge-multiple: true
+
+      - name: Merge and Generate Final Report
+        run: |
+          yarn report:merge
+          yarn report:generate
+
+      - name: Upload Final HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-report
+          path: cypress/reports/html
+
+      - name: Send Email Notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: 'Relatório de Testes Cypress: ${{ job.status }}'
+          to: yago.souz.rodrigues@gmail.com
+          from: GitHub Actions
+          body: |
+            O pipeline de testes finalizou com status: ${{ job.status }}.
+            Confira os detalhes no GitHub: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

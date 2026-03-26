@@ -9,7 +9,7 @@ type NewTransactionTestCtx = {
   contact?: User;
 };
 
-describe('New Transaction', function () {
+describe('New Transaction', { env: { tags: ['@smoke', '@regression'] } }, function () {
   const ctx: NewTransactionTestCtx = {};
 
   beforeEach(function () {
@@ -62,8 +62,13 @@ describe('New Transaction', function () {
     cy.getBySelLike('user-list-item').contains(ctx.contact!.firstName).click({ force: true });
     cy.visualSnapshot('User Search First Name List Item');
 
-    cy.getBySelLike('amount-input').find('input').clear().type('20', { delay: 100 }).blur();
-    cy.getBySelLike('description-input').find('input').clear().type(payment.description, { delay: 100 }).blur();
+    cy.getBySelLike('amount-input').find('input').clear();
+    cy.getBySelLike('amount-input').find('input').type('20', { delay: 100 });
+    cy.getBySelLike('amount-input').find('input').blur();
+
+    cy.getBySelLike('description-input').find('input').clear();
+    cy.getBySelLike('description-input').find('input').type(payment.description, { delay: 100 });
+    cy.getBySelLike('description-input').find('input').blur();
     cy.visualSnapshot('Amount and Description Input');
     cy.getBySelLike('submit-payment').should('be.enabled').click();
     cy.wait(['@createTransaction', '@getUserProfile']);
@@ -84,7 +89,6 @@ describe('New Transaction', function () {
           cy.getBySelLike('user-balance').should('contain', updatedAccountBalance);
         });
     }
-
 
     cy.visualSnapshot('Updated User Balance');
 
@@ -119,8 +123,13 @@ describe('New Transaction', function () {
     cy.getBySelLike('user-list-item').contains(ctx.contact!.firstName).click({ force: true });
     cy.visualSnapshot('User Search First Name Input');
 
-    cy.getBySelLike('amount-input').find('input').clear().type('20', { delay: 100 }).blur();
-    cy.getBySelLike('description-input').find('input').clear().type(request.description, { delay: 100 }).blur();
+    cy.getBySelLike('amount-input').find('input').clear();
+    cy.getBySelLike('amount-input').find('input').type('20', { delay: 100 });
+    cy.getBySelLike('amount-input').find('input').blur();
+
+    cy.getBySelLike('description-input').find('input').clear();
+    cy.getBySelLike('description-input').find('input').type(request.description, { delay: 100 });
+    cy.getBySelLike('description-input').find('input').blur();
     cy.visualSnapshot('Amount and Description Input');
     cy.getBySelLike('submit-request').should('be.enabled').click();
     cy.wait('@createTransaction');
@@ -238,10 +247,9 @@ describe('New Transaction', function () {
     cy.getBySelLike('personal-tab').click();
 
     cy.getBySelLike('transaction-item').should('have.length.at.least', 1);
-    cy.contains(transactionPayload.description)
-      .scrollIntoView()
-      .should('be.visible')
-      .click({ force: true });
+    cy.contains(transactionPayload.description).scrollIntoView();
+    cy.contains(transactionPayload.description).should('be.visible');
+    cy.contains(transactionPayload.description).click({ force: true });
     cy.getBySel('transaction-detail-header').should('exist');
     cy.visualSnapshot('Navigate to Transaction Item');
 

@@ -1,4 +1,4 @@
-﻿import path from 'path';
+import path from 'path';
 import _ from 'lodash';
 import axios from 'axios';
 import dotenv from 'dotenv';
@@ -173,8 +173,16 @@ export default defineConfig({
         },
       });
 
+      require('@cypress/grep/src/plugin')(config);
       codeCoverageTask(on, config);
       return config;
     },
+  },
+  reporter: 'mochawesome',
+  reporterOptions: {
+    reportDir: 'cypress/reports',
+    overwrite: false,
+    html: false,
+    json: true,
   },
 });

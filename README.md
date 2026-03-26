@@ -1,126 +1,89 @@
-﻿# RealWorldApp Cypress â€” Framework Lume
+# Cypress RealWorld App: Automação E2E e CI/CD
 
-![Cypress Tests](https://github.com/yagoSoRodri/RealWorldAppCypress-Lume/actions/workflows/cypress.yml/badge.svg)
+Esta é uma versão aprimorada do **Cypress RealWorld App** focada em demonstrar padrões avançados de automação de testes End-to-End (E2E), boas práticas de qualidade de software e implementação madura de **Integração e Entrega Contínuas (CI/CD)**.
 
-Projeto de automaÃ§Ã£o de testes end-to-end construÃ­do sobre a base do **RealWorld App**, utilizando **Cypress** com a arquitetura proprietÃ¡ria **Lume**. O objetivo Ã© demonstrar domÃ­nio tÃ©cnico em automaÃ§Ã£o de qualidade com prÃ¡ticas modernas de engenharia de software.
-
----
-
-## Pilares TÃ©cnicos
-
-### Arquitetura HÃ­brida (Page Objects + App Actions)
-
-- ImplementaÃ§Ã£o do padrÃ£o **Page Objects** do framework Lume sobre a estrutura nativa do RealWorld App
-- SeparaÃ§Ã£o rigorosa de responsabilidades:
-  - **Pages**: contÃªm exclusivamente localizadores de elementos e mÃ©todos de aÃ§Ã£o
-  - **Testes (.cy.js / .spec.ts)**: concentram todas as asserÃ§Ãµes (`should`, `expect`)
-- Estrutura organizada em `cypress/support/pages/` para mÃ¡xima escalabilidade
-
-### Massa de Dados Resiliente
-
-- UtilizaÃ§Ã£o da biblioteca **@faker-js/faker** para geraÃ§Ã£o dinÃ¢mica de dados a cada execuÃ§Ã£o
-- Campos como nome, sobrenome, usuÃ¡rio e senha sÃ£o criados programaticamente, eliminando dependÃªncia de dados estÃ¡ticos em fixtures JSON
-- Cobertura ampliada de **casos de borda** atravÃ©s da aleatoriedade controlada dos inputs
-
-### IntegraÃ§Ã£o ContÃ­nua (CI/CD)
-
-- Pipeline configurado via **GitHub Actions** no arquivo `.github/workflows/cypress.yml`
-- ExecuÃ§Ã£o automatizada em cada `push` e `pull_request` na branch `main`
-- Ambiente padronizado em **Ubuntu Latest** com Chrome headless
-- Upload automÃ¡tico de **screenshots e vÃ­deos** como artefatos em caso de falha, garantindo rastreabilidade
-
-### Expertise em Banco de Dados
-
-- Projeto preparado para **validaÃ§Ãµes de persistÃªncia direta via SQL**
-- IntegraÃ§Ã£o configurada atravÃ©s de `cy.task('queryDatabase')` com suporte a **PostgreSQL**
-- Possibilidade de verificar se registros foram corretamente persistidos apÃ³s aÃ§Ãµes de UI
-
-### Clean Code
-
-- Seletores resilientes baseados no atributo `data-test`, evitando dependÃªncia de classes CSS ou IDs frÃ¡geis
-- CÃ³digo autoexplicativo e sem comentÃ¡rios desnecessÃ¡rios
-- Comandos customizados (`cy.getBySel`, `cy.loginViaApi`) para reduÃ§Ã£o de duplicaÃ§Ã£o e aumento da legibilidade
+O projeto utiliza **Cypress** e implementa um ecossistema robusto para testes contínuos, garantindo segurança na entrega de código em cenários reais complexos, como aplicações bancárias e de transações financeiras.
 
 ---
 
-## Diferenciais TÃ©cnicos
+## 🚀 Arquitetura de Testes e Design
 
-### ValidaÃ§Ã£o de PersistÃªncia via SQL
+A arquitetura e os princípios de design adotados focam em **manutenibilidade, velocidade e resiliência**:
 
-A maioria dos frameworks de teste E2E valida apenas o que Ã© visÃ­vel na interface. Este projeto vai alÃ©m: apÃ³s aÃ§Ãµes crÃ­ticas de UI (como cadastro de usuÃ¡rio ou criaÃ§Ã£o de transaÃ§Ã£o), o sistema executa queries SQL diretamente no banco de dados via `cy.task('queryDatabase')` para confirmar que o registro foi efetivamente persistido. Essa abordagem reduz drasticamente o risco de bugs silenciosos em produÃ§Ã£o â€” cenÃ¡rios onde a UI exibe sucesso, mas o dado nunca chega ao banco. A validaÃ§Ã£o em camada de dados Ã© uma prÃ¡tica essencial para garantir integridade ponta a ponta.
+### 1. Page Object Model (POM) + App Actions
 
-### Massa de Dados DinÃ¢mica com @faker-js/faker
+- Separação rigorosa de responsabilidades: lógicas de iteração ficam isoladas dos testes que as invocam.
+- Os módulos de teste em `*.spec.ts` concentram estritamente fluxos de negócio e validações (`expect`, `should`).
+- Seletores resilientes baseados no padrão `data-test`.
 
-Testes que dependem de dados fixos (hardcoded) tendem a passar repetidamente sem revelar falhas reais, criando uma falsa sensaÃ§Ã£o de seguranÃ§a. Ao utilizar **@faker-js/faker**, cada execuÃ§Ã£o gera combinaÃ§Ãµes Ãºnicas de nome, sobrenome, usuÃ¡rio e senha, simulando o comportamento real de usuÃ¡rios em produÃ§Ã£o. Essa estratÃ©gia expÃµe bugs de validaÃ§Ã£o, encoding, truncamento e limites de campo que dados estÃ¡ticos jamais alcanÃ§ariam. O resultado Ã© uma suÃ­te de testes mais robusta, com maior cobertura efetiva e menor taxa de defeitos escapados para produÃ§Ã£o.
+### 2. Gestão de Estado e Dados Dinâmicos
 
----
+- **Faker.js**: Uso ativo para geração de massa de dados aleatória e segura em cada execução (nomes, CPFs, transações), revelando gaps na validação e garantindo um portfólio rico de testes não viciados.
+- **Database Seeding Limpo**: A aplicação expõe e consome instâncias via API para reset explícito e populamento do banco (`yarn db:seed`) antes da execução da suíte, assegurando um princípio E2E real: **nenhum teste deverá ser dependente da execução do anterior**.
 
-## Estrutura do Projeto
+### 3. Integração em Camadas Diferentes (UI vs API)
 
-```
-cypress/
-â”œâ”€â”€ support/
-â”‚   â”œâ”€â”€ pages/
-â”‚   â”‚   â””â”€â”€ LoginPage.js
-â”‚   â”œâ”€â”€ commands.ts
-â”‚   â””â”€â”€ e2e.ts
-â”œâ”€â”€ tests/
-â”‚   â”œâ”€â”€ ui/
-â”‚   â”‚   â”œâ”€â”€ auth.spec.ts
-â”‚   â”‚   â”œâ”€â”€ execicio_login_register.spec.js
-â”‚   â”‚   â””â”€â”€ ...
-â”‚   â””â”€â”€ api/
-â”‚       â””â”€â”€ ...
-â”œâ”€â”€ fixtures/
-â””â”€â”€ videos/
-```
+- Testes voltados especificamente à **API** via `cy.request()`. Validamos diretamente operações sensíveis sem precisar sobrecarregar as suítes da UI.
+- Uso de **Agile JSON Schemas (Ajv)** para realizar **Testes de Contrato**. Assegura-se de que qualquer mudança no response do backend que fira a interface documentada será imediatamente barrada pela esteira de testes.
 
 ---
 
-## PrÃ©-requisitos
+## ⚙️ CI/CD com GitHub Actions
 
-- **Node.js** (versÃ£o 20 ou superior)
-- **npm** ou **yarn**
-- **Google Chrome**
+O core deste repositório reside no pipeline `.github/workflows/cypress.yml`. Ele executa um processo de integração profissional, focado na prevenção precoce de bugs.
+
+**Características da Esteira:**
+
+- 🛡️ **Gatilhos (Triggers)**: Rodando em `push` e `pull_request` para a `main`, bem como em execução de manutenções via **Cron agendado (diário às 09:00 BRT)**, protegendo contra degradações silenciosas causadas por dependências de terceiros ("software rot").
+- 🚦 **Filtragem por Tags (`@cypress/grep`)**: Dividimos as execuções de forma paralelizável no GitHub Actions. Passamos as tags como parâmetros de ambiente (`@smoke`, `@api`, `@regression`).
+- ⚡ **Desempenho**: Estratégia nativa do `setup-node` acoplada ao repositório de binários para realizar o **Cache** otimizado de pacotes Node (`node_modules`) e do executável Cypress.
+- 🧹 **Análise Estática (Lint)**: Nenhum teste roda se o código for submetido com erros de esqueleto, má indentação ou lints inseguros. A esteira força execução do `eslint`.
+- 📊 **Notificação & Geração de Reports**: Resultados aglomeram de testes independentes no CI e viram uma interface HTML via **Mochawesome**. Além de upload direto em instâncias no Artifact, notificadores integrados via SMTP disparam comunicados do Job (Success/Failure) por e-mail no final.
 
 ---
 
-## InstalaÃ§Ã£o
+## 🛠️ Execução do Projeto
+
+### Pré-requisitos
+
+- Node.js versão `20` ou `22`
+- Yarn `1.x`
+
+### 1. Instalação e Inicialização
 
 ```bash
-npm install
+# Clone e entre no projeto
+git clone https://github.com/SeuUsername/RealWorldAppCypress-Lume.git
+cd RealWorldAppCypress-Lume
+
+# Instale as dependências
+yarn install
+
+# Inicie o back-end, banco de testes e front-end simultaneamente
+yarn dev
 ```
 
----
+### 2. Formas de rodar os Testes
 
-## ExecuÃ§Ã£o dos Testes
-
-**Modo interativo (Cypress GUI):**
+O projeto separa os testes por comandos práticos descritos no `package.json`:
 
 ```bash
-npx cypress open
-```
+# Abrir Interface Interativa Cypress
+yarn cypress:open
 
-**Modo headless (CI/CD):**
+# Rodar todos os testes no Terminal
+yarn test:ui
 
-```bash
-npx cypress run --browser chrome --headless
+# Rodar apenas jornada crítica de negócio (@smoke)
+yarn test:smoke
+
+# Rodar a regressão completa do software
+yarn test:regression
+
+# Rodar os testes focados apenas em backend API
+yarn test:api:tags
 ```
 
 ---
 
-## Tecnologias Utilizadas
-
-| Tecnologia              | Finalidade                              |
-| ----------------------- | --------------------------------------- |
-| Cypress                 | Framework de testes E2E                 |
-| @faker-js/faker         | GeraÃ§Ã£o dinÃ¢mica de massa de dados   |
-| GitHub Actions          | Pipeline de integraÃ§Ã£o contÃ­nua      |
-| PostgreSQL (pg)         | ValidaÃ§Ã£o de persistÃªncia via SQL    |
-| TypeScript / JavaScript | Linguagens dos testes e configuraÃ§Ãµes |
-
----
-
-## Autor
-
-Desenvolvido como projeto de portfÃ³lio em engenharia de qualidade de software.
+_Repositório construído sob o intuito de estudo real e comprovação empírica de melhores práticas em Engenharia de Qualidade E2E._
