@@ -391,12 +391,16 @@ Cypress.Commands.add('loginByGoogleApi', () => {
   );
 });
 
-Cypress.Commands.add('loginViaApi', (username, password) => {
+Cypress.Commands.add('loginViaApi', (username, password = Cypress.env('defaultPassword')) => {
   cy.request('POST', `${Cypress.env('apiUrl')}/login`, {
     username,
     password,
   }).then((response) => {
-    window.localStorage.setItem(process.env.VITE_AUTH_TOKEN_NAME!, response.body.token);
+    // Definimos o valor no localStorage correspondente ao token da aplicaÃ§Ã£o.
+    const tokenName = Cypress.env('VITE_AUTH_TOKEN_NAME') || process.env.VITE_AUTH_TOKEN_NAME || 'token';
+    window.localStorage.setItem(tokenName, response.body.token);
+
+    // XState exige que o estado de autenticaÃ§Ã£o inicie em loggedIn com o contexto do user.
     window.localStorage.setItem(
       'authState',
       JSON.stringify({
@@ -404,5 +408,9 @@ Cypress.Commands.add('loginViaApi', (username, password) => {
         context: { user: response.body.user },
       })
     );
+
+    // Visitar a raiz da aplicaÃ§Ã£o para inicializar o XState Machine com os dados do localStorage
+    cy.visit('/');
+    cy.getBySel('list-skeleton').should('not.exist');
   });
 });

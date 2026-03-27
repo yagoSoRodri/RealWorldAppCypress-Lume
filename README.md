@@ -86,4 +86,17 @@ yarn test:api:tags
 
 ---
 
+## Decisões de Engenharia e Resolução de Problemas Críticos
+
+### Otimização de Resolvers de Modulos no Node v22 (@cypress/grep)
+A atualização do ecossistema para o Node v22 introduziu breaking changes em relação aos Export Maps, afetando as resoluções do pacote `@cypress/grep`. A correção foi implementada isolando as dependências nativas estritas diretamente nos módulos do projeto, garantindo uma compatibilidade estável da execução do Mocha com as novas restrições de segurança do Node v22, permitindo executar as validações via TAGs (`@smoke`) sem interrupções de import.
+
+### Cache Strategy Optimization (Vite vs. Legacy Build)
+Uma análise apurada dos logs do GitHub Actions CI demonstrou que a estratégia padrão de cache do setup Node gastava créditos buscando o output nativo padrão de outros bundlers (como a pasta `dist`). Como o front-end deste rep foi migrado para a velocidade do Vite gerando na diretória de build específica, mapear explicitamente essa ação de cache no pipeline (ignorando o fallback padrão e focando na árvore de pacotes lógica) eliminou os warmups desnecessários e cortou drasticamente o tempo líquido das execuções (`execution time`).
+
+### Implementação de CI/CD Parallel Matrix
+Com o intuito estratégico de garantir **Fast Feedback**, estruturei as esteiras de teste no GitHub Actions rodando horizontalmente através da funcionalidade `matrix`. Isso dilui os workflows e paraleliza de forma inteligente as execuções das tags de negócio (`@smoke`, `@api`, `@regression`). Este paralelismo assegura a resiliência da stack sem gargalar os deploy reviews e poupando minutagem máquina das frotas da Actions, gerando escala eficiente em ambientes Enterprise.
+
+---
+
 _Repositório construído sob o intuito de estudo real e comprovação empírica de melhores práticas em Engenharia de Qualidade E2E._

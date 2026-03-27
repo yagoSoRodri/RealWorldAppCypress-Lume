@@ -92,7 +92,7 @@ export default defineConfig({
       });
 
       on('task', {
-        async queryDatabase(query) {
+        async queryDb(query) {
           const { Client } = require('pg');
           const client = new Client({
             host: process.env.DB_HOST || 'localhost',
@@ -112,7 +112,7 @@ export default defineConfig({
 
       const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
-      const queryDatabase = ({ entity, query }: { entity: string; query: any }, callback: any) => {
+      const queryDb = ({ entity, query }: { entity: string; query: any }, callback: any) => {
         const fetchData = async (attrs: any) => {
           const { data } = await axios.get(`${testDataApiEndpoint}/${entity}`);
           return callback(data, attrs);
@@ -130,12 +130,12 @@ export default defineConfig({
 
         // fetch test data from a database (MySQL, PostgreSQL, etc...)
         'filter:database'(queryPayload) {
-          return queryDatabase(queryPayload, (data: any, attrs: any) =>
+          return queryDb(queryPayload, (data: any, attrs: any) =>
             _.filter(data.results, attrs)
           );
         },
         'find:database'(queryPayload) {
-          return queryDatabase(queryPayload, (data: any, attrs: any) =>
+          return queryDb(queryPayload, (data: any, attrs: any) =>
             _.find(data.results, attrs)
           );
         },

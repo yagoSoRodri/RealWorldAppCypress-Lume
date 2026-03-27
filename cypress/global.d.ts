@@ -66,6 +66,15 @@ declare namespace Cypress {
     ): Chainable<any>;
 
     /**
+     *  Cypress task for direct pg DB query
+     */
+    task(
+      event: 'queryDb',
+      arg: string,
+      options?: Partial<Loggable & Timeoutable>
+    ): Chainable<any[]>;
+
+    /**
      * Find a single entity via database query
      */
     database(operation: 'find', entity: string, query?: object, log?: boolean): Chainable<any>;
@@ -104,6 +113,11 @@ declare namespace Cypress {
      * Logs-in user by using API request
      */
     loginByApi(username: string, password?: string): Chainable<Response>;
+
+    /**
+     * Logs-in user by using API request with XState initialization
+     */
+    loginViaApi(username: string, password?: string): Chainable<any>;
 
     /**
      * Logs-in user by using Google API request

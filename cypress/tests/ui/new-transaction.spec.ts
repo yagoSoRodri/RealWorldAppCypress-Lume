@@ -31,7 +31,7 @@ describe('New Transaction', { env: { tags: ['@smoke', '@regression'] } }, functi
       ctx.user = users[0];
       ctx.contact = users[1];
 
-      return cy.loginByXstate(ctx.user.username);
+      return cy.loginViaApi(ctx.user.username);
     });
   });
 
@@ -275,6 +275,37 @@ describe('New Transaction', { env: { tags: ['@smoke', '@regression'] } }, functi
         cy.getBySelLike('user-balance').should('contain', updatedAccountBalance);
       });
     cy.visualSnapshot('Verify Updated Sender Account Balance');
+  });
+
+  it('validates database persistence for new transaction via queryDb', function () {
+    const payment = {
+      amount: '30',
+      description: `DB Validation Trans ${Date.now()}`,
+    };
+
+    cy.getBySelLike('new-transaction').click();
+    cy.wait('@allUsers');
+
+    cy.getBySelLike('user-list-item').contains(ctx.contact!.firstName).click({ force: true });
+    
+    cy.getBySelLike('amount-input').find('input').clear().type(payment.amount, { delay: 10 });
+    cy.getBySelLike('amount-input').find('input').blur();
+
+    cy.getBySelLike('description-input').find('input').clear().type(payment.description, { delay: 10 });
+    cy.getBySelLike('description-input').find('input').blur();
+    
+    cy.getBySelLike('submit-payment').should('be.enabled').click();
+    cy.wait('@createTransaction');
+    
+    cy.getBySel('alert-bar-success').should('be.visible');
+
+    // ValidaÃ§Ã£o via Banco de Dados interagindo com a task pg
+    cy.task('queryDb', `SELECT * FROM transactions WHERE description = '${payment.description}'`)
+      .then((results: any) => {
+        expect(results).to.have.length.greaterThan(0);
+        expect(results[0].description).to.equal(payment.description);
+        // Validando que o Node E2E se integrou de ponta a ponta na query relacional
+      });
   });
 
   context('searches for a user by attribute', function () {
