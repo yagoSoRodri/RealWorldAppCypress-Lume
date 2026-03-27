@@ -112,8 +112,8 @@ export default defineConfig({
 
       const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
-      const queryDatabase = ({ entity, query }, callback) => {
-        const fetchData = async (attrs) => {
+      const queryDatabase = ({ entity, query }: { entity: string, query: any }, callback: any) => {
+        const fetchData = async (attrs: any) => {
           const { data } = await axios.get(`${testDataApiEndpoint}/${entity}`);
           return callback(data, attrs);
         };
@@ -173,7 +173,7 @@ export default defineConfig({
         },
       });
 
-      require('@cypress/grep/plugin')(config);
+      require('@cypress/grep/plugin').plugin(config);
       codeCoverageTask(on, config);
       return config;
     },
