@@ -397,7 +397,8 @@ Cypress.Commands.add('loginViaApi', (username, password = Cypress.env('defaultPa
     password,
   }).then((response) => {
     // Definimos o valor no localStorage correspondente ao token da aplicaÃ§Ã£o.
-    const tokenName = Cypress.env('VITE_AUTH_TOKEN_NAME') || process.env.VITE_AUTH_TOKEN_NAME || 'token';
+    const tokenName =
+      Cypress.env('VITE_AUTH_TOKEN_NAME') || process.env.VITE_AUTH_TOKEN_NAME || 'token';
     window.localStorage.setItem(tokenName, response.body.token);
 
     // XState exige que o estado de autenticaÃ§Ã£o inicie em loggedIn com o contexto do user.

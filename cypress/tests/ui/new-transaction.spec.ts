@@ -287,7 +287,7 @@ describe('New Transaction', { env: { tags: ['@smoke', '@regression'] } }, functi
     cy.wait('@allUsers');
 
     cy.getBySelLike('user-list-item').contains(ctx.contact!.firstName).click({ force: true });
-    
+
     cy.getBySelLike('amount-input').find('input').clear();
     cy.getBySelLike('amount-input').find('input').type(payment.amount, { delay: 10 });
     cy.getBySelLike('amount-input').find('input').blur();
@@ -295,19 +295,21 @@ describe('New Transaction', { env: { tags: ['@smoke', '@regression'] } }, functi
     cy.getBySelLike('description-input').find('input').clear();
     cy.getBySelLike('description-input').find('input').type(payment.description, { delay: 10 });
     cy.getBySelLike('description-input').find('input').blur();
-    
+
     cy.getBySelLike('submit-payment').should('be.enabled').click();
     cy.wait('@createTransaction');
-    
+
     cy.getBySel('alert-bar-success').should('be.visible');
 
     // ValidaÃ§Ã£o via Banco de Dados interagindo com a task pg
-    cy.task('queryDb', `SELECT * FROM transactions WHERE description = '${payment.description}'`)
-      .then((results: any) => {
-        expect(results).to.have.length.greaterThan(0);
-        expect(results[0].description).to.equal(payment.description);
-        // Validando que o Node E2E se integrou de ponta a ponta na query relacional
-      });
+    cy.task(
+      'queryDb',
+      `SELECT * FROM transactions WHERE description = '${payment.description}'`
+    ).then((results: any) => {
+      expect(results).to.have.length.greaterThan(0);
+      expect(results[0].description).to.equal(payment.description);
+      // Validando que o Node E2E se integrou de ponta a ponta na query relacional
+    });
   });
 
   context('searches for a user by attribute', function () {

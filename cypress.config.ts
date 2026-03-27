@@ -130,14 +130,10 @@ export default defineConfig({
 
         // fetch test data from a database (MySQL, PostgreSQL, etc...)
         'filter:database'(queryPayload) {
-          return queryDb(queryPayload, (data: any, attrs: any) =>
-            _.filter(data.results, attrs)
-          );
+          return queryDb(queryPayload, (data: any, attrs: any) => _.filter(data.results, attrs));
         },
         'find:database'(queryPayload) {
-          return queryDb(queryPayload, (data: any, attrs: any) =>
-            _.find(data.results, attrs)
-          );
+          return queryDb(queryPayload, (data: any, attrs: any) => _.find(data.results, attrs));
         },
         getAuth0Credentials() {
           const username = process.env.AUTH0_USERNAME;
