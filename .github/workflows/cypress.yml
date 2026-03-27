@@ -116,11 +116,26 @@ jobs:
       - name: Merge and Generate Final Report
         run: |
           mkdir -p cypress/reports
+
+          # Mover JSONs de subpastas criadas pelo download-artifact para o diretorio raiz
+          find cypress/reports -mindepth 2 -name '*.json' -exec mv {} cypress/reports/ \;
+
+          # Remover combined-report.json de execucoes anteriores para evitar loop
+          rm -f cypress/reports/combined-report.json
+
+          # Validar cada JSON individualmente — remover corrompidos
+          for f in cypress/reports/*.json; do
+            if ! python3 -m json.tool "$f" > /dev/null 2>&1; then
+              echo "⚠️ Removendo relatório corrompido: $f"
+              rm -f "$f"
+            fi
+          done
+
           if ls cypress/reports/*.json 1> /dev/null 2>&1; then
             yarn report:merge
             yarn report:generate
           else
-            echo "⚠️ Nenhum relatório JSON encontrado. Pulando a geração do HTML final."
+            echo "⚠️ Nenhum relatório JSON válido encontrado. Pulando a geração do HTML final."
           fi
 
       - name: Upload Final HTML Report
