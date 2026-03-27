@@ -112,7 +112,7 @@ export default defineConfig({
 
       const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
-      const queryDatabase = ({ entity, query }: { entity: string, query: any }, callback: any) => {
+      const queryDatabase = ({ entity, query }: { entity: string; query: any }, callback: any) => {
         const fetchData = async (attrs: any) => {
           const { data } = await axios.get(`${testDataApiEndpoint}/${entity}`);
           return callback(data, attrs);
