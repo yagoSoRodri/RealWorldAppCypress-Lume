@@ -173,7 +173,7 @@ export default defineConfig({
         },
       });
 
-      require('@cypress/grep/src/plugin')(config);
+      require('@cypress/grep/plugin')(config);
       codeCoverageTask(on, config);
       return config;
     },
