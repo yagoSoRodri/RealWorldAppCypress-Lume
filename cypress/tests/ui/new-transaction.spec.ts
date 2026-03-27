@@ -288,10 +288,12 @@ describe('New Transaction', { env: { tags: ['@smoke', '@regression'] } }, functi
 
     cy.getBySelLike('user-list-item').contains(ctx.contact!.firstName).click({ force: true });
     
-    cy.getBySelLike('amount-input').find('input').clear().type(payment.amount, { delay: 10 });
+    cy.getBySelLike('amount-input').find('input').clear();
+    cy.getBySelLike('amount-input').find('input').type(payment.amount, { delay: 10 });
     cy.getBySelLike('amount-input').find('input').blur();
 
-    cy.getBySelLike('description-input').find('input').clear().type(payment.description, { delay: 10 });
+    cy.getBySelLike('description-input').find('input').clear();
+    cy.getBySelLike('description-input').find('input').type(payment.description, { delay: 10 });
     cy.getBySelLike('description-input').find('input').blur();
     
     cy.getBySelLike('submit-payment').should('be.enabled').click();
