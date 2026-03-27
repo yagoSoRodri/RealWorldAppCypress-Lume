@@ -405,8 +405,12 @@ Cypress.Commands.add('loginViaApi', (username, password = Cypress.env('defaultPa
     window.localStorage.setItem(
       'authState',
       JSON.stringify({
-        value: 'loggedIn',
+        value: 'authorized',
         context: { user: response.body.user },
+        _event: {
+          name: 'API_LOGIN',
+          data: { type: 'API_LOGIN' },
+        },
       })
     );
 
